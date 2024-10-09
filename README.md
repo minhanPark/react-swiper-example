@@ -1,50 +1,44 @@
-# React + TypeScript + Vite
+# react swiper example
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 기본 세팅
 
-Currently, two official plugins are available:
+```tsx
+// App.tsx
+// 기본 코드를 다 지우고 데이터를 불러오는 코드를 작성한다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+import { useState, useEffect } from "react";
+/** swiper나 기본 css가 들어갈 파일 */
+import "./App.css";
 
-## Expanding the ESLint configuration
+/** 불러올 영화에서 필요한 부분만 타입 선언 */
+type Movie = {
+  id: number;
+  title: string;
+  imgSrc: string;
+};
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+function App() {
+  const [isLoading, setIsLoading] = useState(false);
+  /** 영화 데이터를 담을 배열 */
+  const [movies, setMovies] = useState<Movie[]>([]);
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+  useEffect(() => {
+    /** 영화 데이터를 불러오는 함수 */
+    async function getMovies() {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          "https://yts.mx/api/v2/list_movies.json?sort_by=year&&limit=10"
+        );
+        const jsonData = await response.json();
+        setMovies(jsonData.data.movies);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    getMovies();
+  }, []);
+}
 ```

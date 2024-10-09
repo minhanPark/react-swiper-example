@@ -42,3 +42,35 @@ function App() {
   }, []);
 }
 ```
+
+## Swiper 설치하기
+
+```bash
+  npm i swiper
+```
+
+위의 명령어로 설치한다.
+
+```tsx
+import { Swiper, SwiperSlide } from "swiper/react";
+/**네비게이션 기능을 사용하려면 모듈에서 불러와야함 */
+import { Navigation } from "swiper/modules";
+
+import "swiper/css";
+/**네비게이션 기능을 사용하려면 css도 불러와야함 */
+import "swiper/css/navigation";
+
+function App() {
+  return (
+    <div className="">
+      {/* 네비게이션 기능을 사용하려면 Swiper에 modules를 넣어줘야함 */}
+      <Swiper modules={[Navigation]} slidesPerView={3} navigation>
+        <SwiperSlide>Slide 1</SwiperSlide>
+        <SwiperSlide>Slide 2</SwiperSlide>
+        <SwiperSlide>Slide 3</SwiperSlide>
+        <SwiperSlide>Slide 4</SwiperSlide>
+      </Swiper>
+    </div>
+  );
+}
+```
